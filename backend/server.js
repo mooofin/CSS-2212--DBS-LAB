@@ -36,6 +36,7 @@ app.use('/api/guests', guestsRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/billing', billingRouter);
 app.use('/api/staff', staffRouter);
+app.use('/api/customer', customerRoutes);
 app.use('/api/auth', authRouter);
 
 // Catch-all to serve the closest Astro page or the main index

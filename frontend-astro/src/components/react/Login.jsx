@@ -77,6 +77,15 @@ export default function Login() {
             </Button>
           </form>
           
+          <div className="mt-6 pt-6 border-t border-dashed border-primary/10 text-center">
+            <p className="text-xs font-medium opacity-50 mb-3">ARE YOU A GUEST?</p>
+            <a href="/customer/login">
+              <Button variant="outline" className="w-full h-10 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-sky-500/5 hover:text-sky-500 hover:border-sky-500/30 transition-all">
+                Enter Guest Portal
+              </Button>
+            </a>
+          </div>
+        </CardContent>
           <div className="mt-8 text-center text-[10px] text-muted-foreground bg-muted/40 p-4 rounded-xl border border-border/50 backdrop-blur-sm">
             <p className="font-bold mb-2 uppercase tracking-[0.15em] opacity-60">System Access</p>
             <div className="grid grid-cols-2 gap-4">
