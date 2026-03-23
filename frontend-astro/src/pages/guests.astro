@@ -1,0 +1,11 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import GuestsReact from '../components/react/Guests';
+import { ToastProvider } from '../components/ui/Toast';
+---
+
+<MainLayout title="Guests">
+  <ToastProvider client:load>
+    <GuestsReact client:load />
+  </ToastProvider>
+</MainLayout>

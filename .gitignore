@@ -1,0 +1,10 @@
+node_modules/
+.env
+dist/
+.astro/
+.DS_Store
+*.log
+.vscode/
+.idea/
+architecture.svg
+detailed_architecture.svg

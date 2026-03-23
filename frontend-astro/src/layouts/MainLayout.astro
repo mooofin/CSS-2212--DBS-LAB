@@ -1,0 +1,145 @@
+---
+import '@/index.css';
+import { Hotel, LayoutDashboard, BedDouble, Users, CalendarRange, IndianRupee, UserCog, Settings, HelpCircle, LogOut, Search } from 'lucide-react';
+
+export interface Props {
+  title: string;
+  user?: any;
+}
+
+const { title } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | Grand Stay</title>
+  </head>
+  <body class="bg-background text-foreground antialiased selection:bg-primary/30">
+    <div id="app-root" class="flex h-screen overflow-hidden bg-muted/40">
+      {/* Sidebar — Refined "Inset" Professional Look */}
+      <aside class="w-72 flex flex-col gap-0 bg-card/60 backdrop-blur-xl m-3 mr-0 rounded-2xl border shadow-2xl shadow-black/20 shrink-0 overflow-hidden stagger-1">
+        <div class="px-6 py-8 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+            <Hotel size={20} class="text-primary-foreground" />
+          </div>
+          <div>
+            <h1 class="text-base font-bold leading-none font-heading tracking-tight">Grand Stay</h1>
+            <p class="text-[10px] text-muted-foreground mt-1.5 uppercase tracking-[0.2em] font-semibold opacity-60">Management</p>
+          </div>
+        </div>
+
+        <div class="h-px bg-border/50 mx-6"></div>
+
+        <nav class="flex-1 px-4 py-4 space-y-1.5 overflow-y-auto">
+          <p class="px-4 pb-2 pt-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] opacity-40">Main Menu</p>
+          <a href="/dashboard" class="block group">
+            <button class="w-full flex items-center gap-3 px-4 py-2.5 text-[13.5px] rounded-xl hover:bg-muted/80 transition-all text-muted-foreground hover:text-foreground font-medium">
+              <LayoutDashboard size={17} class="opacity-70 group-hover:opacity-100 transition-opacity" /> Dashboard
+            </button>
+          </a>
+          <a href="/rooms" class="block group">
+            <button class="w-full flex items-center gap-3 px-4 py-2.5 text-[13.5px] rounded-xl hover:bg-muted/80 transition-all text-muted-foreground hover:text-foreground font-medium">
+              <BedDouble size={17} class="opacity-70 group-hover:opacity-100 transition-opacity" /> Rooms
+            </button>
+          </a>
+          <a href="/guests" class="block group">
+            <button class="w-full flex items-center gap-3 px-4 py-2.5 text-[13.5px] rounded-xl hover:bg-muted/80 transition-all text-muted-foreground hover:text-foreground font-medium">
+              <Users size={17} class="opacity-70 group-hover:opacity-100 transition-opacity" /> Guests
+            </button>
+          </a>
+          <a href="/bookings" class="block group">
+            <button class="w-full flex items-center gap-3 px-4 py-2.5 text-[13.5px] rounded-xl hover:bg-muted/80 transition-all text-muted-foreground hover:text-foreground font-medium">
+              <CalendarRange size={17} class="opacity-70 group-hover:opacity-100 transition-opacity" /> Bookings
+            </button>
+          </a>
+          
+          <span id="admin-links">
+             <p class="px-4 pb-2 pt-8 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.15em] opacity-40">Administrator</p>
+             <a href="/billing" class="block group">
+                <button class="w-full flex items-center gap-3 px-4 py-2.5 text-[13.5px] rounded-xl hover:bg-muted/80 transition-all text-muted-foreground hover:text-foreground font-medium">
+                  <IndianRupee size={17} class="opacity-70 group-hover:opacity-100 transition-opacity" /> Billing
+                </button>
+              </a>
+              <a href="/staff" class="block group">
+                <button class="w-full flex items-center gap-3 px-4 py-2.5 text-[13.5px] rounded-xl hover:bg-muted/80 transition-all text-muted-foreground hover:text-foreground font-medium">
+                  <UserCog size={17} class="opacity-70 group-hover:opacity-100 transition-opacity" /> Staff
+                </button>
+              </a>
+          </span>
+        </nav>
+
+        <div class="px-4 py-4 space-y-1">
+          <button class="w-full flex items-center gap-3 px-4 py-2 text-xs rounded-lg hover:bg-muted/50 transition-all text-muted-foreground font-medium">
+            <Settings size={15} class="opacity-60" /> Settings
+          </button>
+          <button class="w-full flex items-center gap-3 px-4 py-2 text-xs rounded-lg hover:bg-muted/50 transition-all text-muted-foreground font-medium">
+            <HelpCircle size={15} class="opacity-60" /> Help Support
+          </button>
+        </div>
+
+        <div class="h-px bg-border/50 mx-6"></div>
+
+        <div class="p-5 bg-muted/20">
+          <div class="flex items-center gap-3 px-1">
+            <div id="user-avatar" class="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-sm font-bold text-primary shadow-inner">A</div>
+            <div class="flex-1 min-w-0">
+              <p id="username" class="text-xs font-bold leading-none truncate capitalize tracking-tight">User</p>
+              <p id="user-role" class="text-[9px] text-muted-foreground truncate mt-1.5 uppercase font-bold tracking-[0.1em] opacity-50">Guest</p>
+            </div>
+            <button id="logout-btn" class="h-8 w-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all">
+              <LogOut size={14} />
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content — Optimized for Space and Focus */}
+      <main class="flex-1 overflow-hidden m-3 rounded-2xl border bg-background shadow-2xl shadow-black/10 relative flex flex-col">
+        <header class="flex items-center gap-4 border-b px-8 h-16 shrink-0 sticky top-0 bg-background/80 backdrop-blur-md z-10">
+          <div class="h-5 w-px bg-border/60 mx-1"></div>
+          <div class="flex items-center gap-3 flex-1">
+            <Search size={16} class="text-muted-foreground/40" />
+            <input 
+              class="bg-transparent border-none outline-none text-sm text-foreground w-full placeholder:text-muted-foreground/30 font-medium" 
+              placeholder="Search across all modules..." 
+            />
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="h-8 w-8 rounded-full bg-muted/40 animate-pulse border border-border/50"></div>
+          </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto px-8 py-8 md:px-12 md:py-10">
+           <slot />
+        </div>
+      </main>
+    </div>
+
+    <script is:inline>
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      if (!user && window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
+      if (user) {
+        document.getElementById('username').textContent = user.username;
+        document.getElementById('user-role').textContent = user.role;
+        document.getElementById('user-avatar').textContent = user.username[0].toUpperCase();
+        if (user.role !== 'admin') {
+          const adminLinks = document.getElementById('admin-links');
+          if (adminLinks) adminLinks.style.display = 'none';
+        }
+      }
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.onclick = () => {
+          localStorage.removeItem('user');
+          window.location.href = '/login';
+        };
+      }
+    </script>
+  </body>
+</html>

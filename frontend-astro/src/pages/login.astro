@@ -1,0 +1,26 @@
+---
+import LoginReact from '../components/react/Login';
+import { ToastProvider } from '../components/ui/Toast';
+import '@/index.css';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Login | Grand Stay</title>
+  </head>
+  <body>
+    <ToastProvider client:load>
+      <LoginReact client:load />
+    </ToastProvider>
+
+    <script is:inline>
+      // Clear user session if strictly necessary? 
+      // No, let the Login component handle its own redirects.
+      if (localStorage.getItem('user')) {
+        window.location.href = '/dashboard';
+      }
+    </script>
+  </body>
+</html>
