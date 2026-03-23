@@ -8,6 +8,7 @@ import guestsRouter from './routes/guests.js';
 import bookingsRouter from './routes/bookings.js';
 import billingRouter from './routes/billing.js';
 import staffRouter from './routes/staff.js';
+import customerRouter from './routes/customer.js';
 import authRouter from './routes/auth.js';
 import errorHandler from './middleware/errorHandler.js';
 
@@ -36,7 +37,7 @@ app.use('/api/guests', guestsRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/billing', billingRouter);
 app.use('/api/staff', staffRouter);
-app.use('/api/customer', customerRoutes);
+app.use('/api/customer', customerRouter);
 app.use('/api/auth', authRouter);
 
 // Catch-all to serve the closest Astro page or the main index

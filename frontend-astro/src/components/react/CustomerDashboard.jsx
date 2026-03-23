@@ -36,9 +36,17 @@ export default function CustomerDashboard() {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-4xl font-bold tracking-tight font-heading">Welcome back, {user?.name.split(' ')[0]}</h1>
-        <p className="text-muted-foreground font-medium">Here's a summary of your journeys with us.</p>
+      <header className="flex justify-between items-start gap-4">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-4xl font-bold tracking-tight font-heading">Welcome back, {user?.name.split(' ')[0]}</h1>
+          <p className="text-muted-foreground font-medium">Here's a summary of your journeys with us.</p>
+        </div>
+        <button 
+          onClick={() => { localStorage.removeItem('user'); window.location.href = '/customer/login'; }}
+          className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border hover:bg-destructive/5 hover:text-destructive hover:border-destructive/30 transition-all opacity-50 hover:opacity-100"
+        >
+          Sign Out
+        </button>
       </header>
 
       <div className="grid gap-6 md:grid-cols-3">

@@ -76,7 +76,7 @@ export default function Login() {
               Sign In
             </Button>
           </form>
-          
+
           <div className="mt-6 pt-6 border-t border-dashed border-primary/10 text-center">
             <p className="text-xs font-medium opacity-50 mb-3">ARE YOU A GUEST?</p>
             <a href="/customer/login">
@@ -86,20 +86,20 @@ export default function Login() {
             </a>
           </div>
         </CardContent>
-          <div className="mt-8 text-center text-[10px] text-muted-foreground bg-muted/40 p-4 rounded-xl border border-border/50 backdrop-blur-sm">
-            <p className="font-bold mb-2 uppercase tracking-[0.15em] opacity-60">System Access</p>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-left">
-                <p className="font-bold text-foreground opacity-80 uppercase tracking-tighter">Admin</p>
-                <p className="mt-0.5">admin / admin123</p>
-              </div>
-              <div className="text-left border-l pl-4 border-border/50">
-                <p className="font-bold text-foreground opacity-80 uppercase tracking-tighter">Staff</p>
-                <p className="mt-0.5">staff / staff123</p>
-              </div>
+
+        <div className="mt-8 text-center text-[10px] text-muted-foreground bg-muted/40 p-4 rounded-xl border border-border/50 backdrop-blur-sm mx-8 mb-8">
+          <p className="font-bold mb-2 uppercase tracking-[0.15em] opacity-60">System Access</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="text-left">
+              <p className="font-bold text-foreground opacity-80 uppercase tracking-tighter">Admin</p>
+              <p className="mt-0.5">admin / admin123</p>
+            </div>
+            <div className="text-left border-l pl-4 border-border/50">
+              <p className="font-bold text-foreground opacity-80 uppercase tracking-tighter">Staff</p>
+              <p className="mt-0.5">staff / staff123</p>
             </div>
           </div>
-        </CardContent>
+        </div>
       </Card>
 
       {/* Footer Branding */}

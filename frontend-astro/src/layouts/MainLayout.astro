@@ -121,23 +121,52 @@ const { title } = Astro.props;
 
     <script is:inline>
       const user = JSON.parse(localStorage.getItem('user') || 'null');
-      if (!user && window.location.pathname !== '/login') {
+      const publicPaths = ['/login', '/customer/login'];
+      
+      if (!user && !publicPaths.includes(window.location.pathname)) {
         window.location.href = '/login';
       }
+
       if (user) {
         document.getElementById('username').textContent = user.username;
         document.getElementById('user-role').textContent = user.role;
         document.getElementById('user-avatar').textContent = user.username[0].toUpperCase();
+        
+        // Hide admin links for non-admins
         if (user.role !== 'admin') {
           const adminLinks = document.getElementById('admin-links');
           if (adminLinks) adminLinks.style.display = 'none';
         }
+
+        // Customer Logic: Redirect from staff pages if they are a customer
+        const staffOnlyPaths = ['/dashboard', '/rooms', '/guests', '/bookings', '/billing', '/staff'];
+        if (user.role === 'customer') {
+          // Hide sidebar and search for customers
+          const sidebar = document.querySelector('aside');
+          const header = document.querySelector('header');
+          if (sidebar) sidebar.style.display = 'none';
+          if (header) header.style.display = 'none';
+          
+          // Center content
+          const main = document.querySelector('main');
+          if (main) {
+            main.style.marginLeft = '0';
+            main.style.width = '100%';
+            main.style.marginTop = '0';
+          }
+
+          if (staffOnlyPaths.includes(window.location.pathname)) {
+            window.location.href = '/customer/dashboard';
+          }
+        }
       }
+
       const logoutBtn = document.getElementById('logout-btn');
       if (logoutBtn) {
         logoutBtn.onclick = () => {
+          const isCustomer = user?.role === 'customer';
           localStorage.removeItem('user');
-          window.location.href = '/login';
+          window.location.href = isCustomer ? '/customer/login' : '/login';
         };
       }
     </script>
