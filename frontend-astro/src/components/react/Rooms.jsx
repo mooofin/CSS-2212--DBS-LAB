@@ -66,7 +66,9 @@ export default function Rooms() {
 
     const sorted = [...rooms].sort((a, b) => {
         const av = a[sortField], bv = b[sortField];
-        return sortDir === 'asc' ? (av < bv ? -1 : 1) : (av > bv ? -1 : 1);
+        if (av === bv) return 0;
+        if (sortDir === 'asc') return av < bv ? -1 : 1;
+        return av > bv ? -1 : 1;
     });
 
     const toggleSort = (field) => {

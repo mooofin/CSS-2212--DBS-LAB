@@ -6,8 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { User, Loader2 } from 'lucide-react';
 import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { API_BASE_URL } from '@/config/api';
 
 export default function CustomerLogin() {
   const [identifier, setIdentifier] = useState('');
@@ -19,7 +18,7 @@ export default function CustomerLogin() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/customer/login`, { identifier, password });
+      const res = await axios.post(`${API_BASE_URL}/customer/login`, { identifier, password });
       localStorage.setItem('user', JSON.stringify(res.data));
       toast.success(`Welcome, ${res.data.name}!`);
       window.location.href = '/customer/dashboard';

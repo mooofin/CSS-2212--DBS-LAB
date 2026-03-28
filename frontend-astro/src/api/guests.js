@@ -1,9 +1,8 @@
 import axios from 'axios';
+import { API_BASE_URL } from '@/config/api';
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-
-export const getGuests = (params) => axios.get(`${BASE}/guests`, { params });
-export const getGuest = (id) => axios.get(`${BASE}/guests/${id}`);
-export const createGuest = (data) => axios.post(`${BASE}/guests`, data);
-export const updateGuest = (id, data) => axios.put(`${BASE}/guests/${id}`, data);
-export const deleteGuest = (id) => axios.delete(`${BASE}/guests/${id}`);
+export const getGuests = (params) => axios.get(`${API_BASE_URL}/guests`, { params });
+export const getGuest = (id) => axios.get(`${API_BASE_URL}/guests/${id}`);
+export const createGuest = (data) => axios.post(`${API_BASE_URL}/guests`, data);
+export const updateGuest = (id, data) => axios.put(`${API_BASE_URL}/guests/${id}`, data);
+export const deleteGuest = (id) => axios.delete(`${API_BASE_URL}/guests/${id}`);

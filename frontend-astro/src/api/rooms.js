@@ -1,10 +1,9 @@
 import axios from 'axios';
+import { API_BASE_URL } from '@/config/api';
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-
-export const getRooms = (params) => axios.get(`${BASE}/rooms`, { params });
-export const getRoom = (id) => axios.get(`${BASE}/rooms/${id}`);
-export const createRoom = (data) => axios.post(`${BASE}/rooms`, data);
-export const updateRoom = (id, data) => axios.put(`${BASE}/rooms/${id}`, data);
-export const deleteRoom = (id) => axios.delete(`${BASE}/rooms/${id}`);
-export const getRoomSummary = () => axios.get(`${BASE}/rooms/summary`);
+export const getRooms = (params) => axios.get(`${API_BASE_URL}/rooms`, { params });
+export const getRoom = (id) => axios.get(`${API_BASE_URL}/rooms/${id}`);
+export const createRoom = (data) => axios.post(`${API_BASE_URL}/rooms`, data);
+export const updateRoom = (id, data) => axios.put(`${API_BASE_URL}/rooms/${id}`, data);
+export const deleteRoom = (id) => axios.delete(`${API_BASE_URL}/rooms/${id}`);
+export const getRoomSummary = () => axios.get(`${API_BASE_URL}/rooms/summary`);

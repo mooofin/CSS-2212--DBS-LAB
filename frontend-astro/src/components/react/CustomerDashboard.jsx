@@ -3,8 +3,7 @@ import axios from 'axios';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, CreditCard, MapPin, User as UserIcon } from 'lucide-react';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+import { API_BASE_URL } from '@/config/api';
 
 export default function CustomerDashboard() {
   const [user, setUser] = useState(null);
@@ -23,7 +22,7 @@ export default function CustomerDashboard() {
 
   const fetchData = async (id) => {
     try {
-      const res = await axios.get(`${API_URL}/customer/bookings/${id}`);
+      const res = await axios.get(`${API_BASE_URL}/customer/bookings/${id}`);
       setBookings(res.data);
     } catch (err) {
       console.error(err);

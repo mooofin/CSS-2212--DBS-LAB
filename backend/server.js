@@ -40,6 +40,11 @@ app.use('/api/staff', staffRouter);
 app.use('/api/customer', customerRouter);
 app.use('/api/auth', authRouter);
 
+// 404 handler for API routes
+app.use('/api/*', (req, res) => {
+    res.status(404).json({ error: 'API endpoint not found' });
+});
+
 // Catch-all to serve the closest Astro page or the main index
 app.get('*', (req, res) => {
     // Attempt to serve the specific route's index.html if it exists

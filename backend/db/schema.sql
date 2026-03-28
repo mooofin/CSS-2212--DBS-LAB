@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS guests (
   first_name  VARCHAR(100) NOT NULL,
   last_name   VARCHAR(100) NOT NULL,
   email       VARCHAR(255) UNIQUE NOT NULL,
+  username    VARCHAR(50) UNIQUE,
+  password    VARCHAR(255),
   phone       VARCHAR(20),
   address     TEXT,
   id_type     ENUM('passport','aadhar','driving_license','pan'),
@@ -168,19 +170,19 @@ INSERT INTO rooms (room_number, type, price_per_night, status, floor, max_occupa
 ('204', 'deluxe',  6500.00, 'occupied',    2, 3, 'WiFi, AC, TV, Mini-bar, Balcony, Room Service');
 
 -- Guests (12 guests)
-INSERT INTO guests (first_name, last_name, email, phone, address, id_type, id_number) VALUES
-('Arjun',   'Sharma',    'arjun.sharma@email.com',    '+91-9876543210', '42 MG Road, Bengaluru',      'aadhar',          '1234-5678-9012'),
-('Priya',   'Patel',     'priya.patel@email.com',     '+91-9876543211', '15 Park Street, Mumbai',      'passport',        'K1234567'),
-('Rahul',   'Verma',     'rahul.verma@email.com',     '+91-9876543212', '78 Nehru Place, Delhi',       'driving_license', 'DL-0420110012345'),
-('Sneha',   'Reddy',     'sneha.reddy@email.com',     '+91-9876543213', '23 Jubilee Hills, Hyderabad', 'pan',             'ABCDE1234F'),
-('Vikram',  'Singh',     'vikram.singh@email.com',    '+91-9876543214', '9 Civil Lines, Jaipur',       'aadhar',          '9876-5432-1098'),
-('Ananya',  'Gupta',     'ananya.gupta@email.com',    '+91-9876543215', '56 Salt Lake, Kolkata',       'passport',        'L7654321'),
-('Karthik', 'Nair',      'karthik.nair@email.com',   '+91-9876543216', '31 Marine Drive, Kochi',      'driving_license', 'KL-1320140067890'),
-('Meera',   'Iyer',      'meera.iyer@email.com',     '+91-9876543217', '12 T Nagar, Chennai',         'aadhar',          '5678-1234-9012'),
-('Rohit',   'Joshi',     'rohit.joshi@email.com',    '+91-9876543218', '45 Koregaon Park, Pune',      'pan',             'FGHIJ5678K'),
-('Divya',   'Menon',     'divya.menon@email.com',    '+91-9876543219', '8 MG Road, Thrissur',         'passport',        'M9876543'),
-('Amit',    'Chauhan',   'amit.chauhan@email.com',   '+91-9876543220', '19 Lajpat Nagar, Delhi',      'aadhar',          '3456-7890-1234'),
-('Pooja',   'Deshmukh',  'pooja.deshmukh@email.com', '+91-9876543221', '67 FC Road, Pune',            'driving_license', 'MH-1220150098765');
+INSERT INTO guests (first_name, last_name, email, username, password, phone, address, id_type, id_number) VALUES
+('Arjun',   'Sharma',    'arjun.sharma@email.com',    'arjun.sharma',    'password123', '+91-9876543210', '42 MG Road, Bengaluru',      'aadhar',          '1234-5678-9012'),
+('Priya',   'Patel',     'priya.patel@email.com',     'priya.patel',     'password123', '+91-9876543211', '15 Park Street, Mumbai',      'passport',        'K1234567'),
+('Rahul',   'Verma',     'rahul.verma@email.com',     'rahul.verma',     'password123', '+91-9876543212', '78 Nehru Place, Delhi',       'driving_license', 'DL-0420110012345'),
+('Sneha',   'Reddy',     'sneha.reddy@email.com',     'sneha.reddy',     'password123', '+91-9876543213', '23 Jubilee Hills, Hyderabad', 'pan',             'ABCDE1234F'),
+('Vikram',  'Singh',     'vikram.singh@email.com',    'vikram.singh',    'password123', '+91-9876543214', '9 Civil Lines, Jaipur',       'aadhar',          '9876-5432-1098'),
+('Ananya',  'Gupta',     'ananya.gupta@email.com',    'ananya.gupta',    'password123', '+91-9876543215', '56 Salt Lake, Kolkata',       'passport',        'L7654321'),
+('Karthik', 'Nair',      'karthik.nair@email.com',   'karthik.nair',    'password123', '+91-9876543216', '31 Marine Drive, Kochi',      'driving_license', 'KL-1320140067890'),
+('Meera',   'Iyer',      'meera.iyer@email.com',     'meera.iyer',      'password123', '+91-9876543217', '12 T Nagar, Chennai',         'aadhar',          '5678-1234-9012'),
+('Rohit',   'Joshi',     'rohit.joshi@email.com',    'rohit.joshi',     'password123', '+91-9876543218', '45 Koregaon Park, Pune',      'pan',             'FGHIJ5678K'),
+('Divya',   'Menon',     'divya.menon@email.com',    'divya.menon',     'password123', '+91-9876543219', '8 MG Road, Thrissur',         'passport',        'M9876543'),
+('Amit',    'Chauhan',   'amit.chauhan@email.com',   'amit.chauhan',    'password123', '+91-9876543220', '19 Lajpat Nagar, Delhi',      'aadhar',          '3456-7890-1234'),
+('Pooja',   'Deshmukh',  'pooja.deshmukh@email.com', 'pooja.deshmukh',  'password123', '+91-9876543221', '67 FC Road, Pune',            'driving_license', 'MH-1220150098765');
 
 -- Bookings (10 bookings)
 INSERT INTO bookings (guest_id, room_id, check_in, check_out, status, adults, children, special_requests) VALUES
