@@ -2,7 +2,96 @@
 
 The Grand Stay project represents a modern approach to hotel operations, prioritizing database integrity and high-performance frontend architecture. Originally developed as a Database Systems Lab project (CSS 2212), it has evolved into an Astro-powered application that balances raw SQL power with a premium user experience.
 
-## System Flow & Architecture
+## Quick Start
+
+### Prerequisites
+- Node.js >= 22.12.0
+- MySQL/MariaDB running
+- Database user: `hotel` with password: `hotel123`
+
+### One-Command Setup
+
+```bash
+./start.sh
+```
+
+This will:
+- Check MySQL is running
+- Verify database exists
+- Install dependencies if needed
+- Build frontend if needed
+- Start the server on port 3001
+
+### Manual Setup
+
+If you prefer step-by-step:
+
+```bash
+# 1. Create and setup database
+mysql -u root -p < backend/db/schema.sql
+
+# 2. Configure environment (already set in backend/.env)
+# DB_HOST=localhost
+# DB_USER=hotel
+# DB_PASSWORD=hotel123
+# DB_NAME=hotel_mgmt
+# PORT=3001
+
+# 3. Install backend dependencies
+cd backend
+npm install
+
+# 4. Build frontend
+cd ../frontend-astro
+npm install
+npm run build
+
+# 5. Start server
+cd ../backend
+node server.js
+```
+
+### Access the Application
+
+**URL**: http://localhost:3001
+
+**Login Credentials**:
+- Admin: `admin` / `admin123`
+- Staff: `staff` / `staff123`
+- Customer: Use email/phone from bookings
+
+### Managing the Server
+
+```bash
+# Start server
+./start.sh
+
+# Stop server
+./kill.sh
+
+# Test endpoints
+./test.sh
+```
+
+### Development Mode
+
+For active development with hot reload:
+
+```bash
+# Terminal 1 - Backend
+cd backend
+npm run dev
+
+# Terminal 2 - Frontend
+cd frontend-astro
+npm run dev
+```
+
+Access frontend dev server at http://localhost:5174 with hot reload.
+
+---
+
+## Technical Architecture
 
 The application follows a strict data-driven lifecycle, transitioning from server-side rendered layouts to interactive client-side islands.
 
@@ -61,39 +150,7 @@ hotel-project/
 
 ## Getting Started (Production)
 
-To run the Grand Stay system locally, follow these technical steps:
-
-### 1. Database Initialization
-Create a MySQL database named `hotel_mgmt` and run the schema script:
-```bash
-mysql -u root -p hotel_mgmt < backend/db/schema.sql
-```
-
-### 2. Environment Configuration
-Create a `.env` file in the `backend/` directory based on `.env.example`:
-```bash
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=hotel_mgmt
-PORT=3001
-```
-
-### 3. Build & Deployment
-Install dependencies and build the optimized Astro frontend:
-```bash
-# Frontend setup
-cd frontend-astro
-npm install
-npm run build
-
-# Backend launch
-cd ../backend
-npm install
-node server.js
-```
-
-The system will be accessible at [**http://localhost:3001**](http://localhost:3001).
+See the [Quick Start](#quick-start) section above for instructions.
 
 ---
 
