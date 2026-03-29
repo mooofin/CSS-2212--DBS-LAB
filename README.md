@@ -1,88 +1,82 @@
-# 🏨 Grand Stay: Elevating Hospitality through Data Excellence
+# Grand Stay: Hotel Management System
 
-Welcome to **Grand Stay**, a sophisticated hotel management ecosystem that bridges the gap between traditional hospitality and modern, high-performance technology. Originally conceived as a deep dive into relational databases, it has evolved into a premium platform that delivers a seamless experience for both staff and guests.
-
----
-
-## 🌟 Our Philosophy
-
-At Grand Stay, we believe that exceptional hospitality starts with exceptional technology. Every check-in, every room assignment, and every billing transaction is backed by a robust, data-driven architecture that ensures reliability without sacrificing speed.
-
-> [!NOTE]
-> **Built for Performance**: By utilizing Astro's "Islands Architecture," we've reduced client-side JavaScript by 60%, ensuring that your management dashboard is as fast as a boutique stay is comfortable.
+A hotel management system that puts business logic in the database. Built for a database course, but actually works.
 
 ---
 
-## 🚀 Quick Start: Welcome Aboard
+## How to Run It
 
-Getting the Grand Stay system up and running is as simple as a warm welcome at the front desk.
-
-### 1. The Magic Command
-From your terminal, run the unified start script:
 ```bash
-./start.sh
+./manage.sh start
 ```
 
-### 2. What Happens Behind the Scenes?
-- ✅ **Sanity Check**: Briefly verifies your environment.
-- ✅ **Database Orchestration**: Sets up your MySQL/MariaDB schema automatically.
-- ✅ **Component Assembly**: Installs any missing pieces and builds the frontend.
-- ✅ **Full Launch**: Starts the server on **http://localhost:3001**.
+This installs dependencies and starts both backend (port 3001) and frontend (port 5173).
+
+**Other commands:**
+```bash
+./manage.sh stop      # Stop all servers
+./manage.sh restart   # Restart the application
+./manage.sh test      # Run API tests
+./manage.sh status    # Check if servers are running
+./manage.sh clean     # Remove dependencies and build artifacts
+```
 
 ---
 
-## 🔐 The Keys to the Kingdom
+## Demo Accounts
 
-Explore the different facets of the system using our demo credentials:
-
-| Role | Identity | Access Key | Focus |
-|------|----------|------------|-------|
-| **Admin** | `admin` | `admin123` | Full strategic visibility & revenue tracking |
-| **Staff** | `staff` | `staff123` | Daily operations, check-ins, & guest care |
-| **Guest** | *See database* | `password123` | Personal stays & reservation history |
+| Role | Username | Password | What You Can Do |
+|------|----------|----------|-----------------|
+| Admin | `admin` | `admin123` | Analytics and revenue reports |
+| Staff | `staff` | `staff123` | Check-ins, room assignments |
+| Guest | *See database* | `password123` | View your bookings |
 
 ---
 
-## 🏛️ The Architecture of Excellence
+## Technical Details
 
-Grand Stay isn't just a website; it's a meticulously crafted system designed for reliability and scale.
+**Stack:**
+- Backend: Node.js + Express
+- Frontend: Astro with React islands
+- Database: MySQL 8+
+- Styling: Tailwind CSS
 
-### 🛠️ The Tech Stack
-- **Engine**: Node.js & Express RESTful API
-- **Interface**: Astro with React "Islands" for peak performance
-- **Heart**: MySQL 8+ with triggers and views for data integrity
-- **Styling**: Tailored Tailwind CSS for a premium aesthetic
+**Why Astro:** The Islands Architecture loads React components only where needed. This cuts client-side JavaScript by about 60% compared to a full React app. For a dashboard with mostly static content, it's a noticeable difference.
 
-### 📊 System Design
-![Refined System Architecture](./architecture_refined.svg)
+### Architecture
 
-We've decoupled the **Logic Layer** from the **Presentation Layer**, allowing the database to do what it does best: maintain the absolute truth. Triggers handle mission-critical state transitions, while Views flatten complex data into high-performance streams for the frontend.
+![System Architecture](./architecture_refined.svg)
+
+Most of the business logic lives in database triggers and views. Room availability, billing calculations, and state transitions happen at the database layer. The API mostly reads from views and writes to tables.
+
+This means less application code and fewer places for bugs to hide. When room status changes, a trigger updates availability. When you query available rooms, you're reading a view that already did the math.
 
 ---
 
-## 📂 The Blueprint
+## Project Structure
 
 ```text
 hotel-project/
-├── backend/             # The RESTful Heart (Node.js/Express)
-│   ├── db/              # SQL Schemas, Triggers, & Views
-│   ├── routes/          # Purpose-built API endpoints
-│   └── server.js        # The Production Portal
-├── frontend-astro/      # The Human Interface (Astro/React)
-│   ├── src/             # Where the magic happens (islands & pages)
-│   └── astro.config.mjs # The core configuration
-└── README.md            # Your map to the project
+├── backend/
+│   ├── db/              # Schemas, triggers, views
+│   ├── routes/          # REST endpoints
+│   └── server.js
+├── frontend-astro/
+│   ├── src/             # Pages and components
+│   └── astro.config.mjs
+└── README.md
 ```
 
 ---
 
-## 🎓 The Academic Journey
+## Context
 
-Developed for the **Database Systems Lab (CSS 2212)**, Grand Stay is a testament to the power of raw SQL. By intentionally eschewing heavy ORMs, we've achieved a level of control and performance that demonstrates a deep understanding of data lifecycle management and server-side automation.
+This was built for Database Systems Lab (CSS 2212). The assignment was to design a non-trivial database schema. We deliberately avoided ORMs to see how much logic could live in SQL itself.
+
+Turns out: quite a bit. Triggers handle state machines, views handle reporting, and stored procedures (not used here, but could be) can handle complex transactions. The application layer becomes thinner.
+
+Whether this is a good idea for production depends on your team. If everyone knows SQL well, it's maintainable. If not, debugging trigger chains is miserable.
 
 ---
 
-### ✨ Ready to Begin?
-[Quick Start](#-quick-start-welcome-aboard) | [Kill the server](./kill.sh)
-
-**Built with passion for modern web and database technologies.**
+[How to Run](#how-to-run-it) | [Management Commands](./manage.sh)

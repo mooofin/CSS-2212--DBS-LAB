@@ -42,3 +42,5 @@ yarn-error.log*
 architecture.svg
 detailed_architecture.svg
 architecture_refined.svg
+hotel_gui.py
+# All architecture variations ignored
