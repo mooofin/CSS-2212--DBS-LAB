@@ -1,8 +1,9 @@
 {
   "scripts": {
+    "predev": "lsof -ti:3001,5173 | xargs -r kill -9 || true",
     "dev:backend": "npm --prefix backend run dev",
-    "dev:frontend": "npm --prefix frontend-astro run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
     "dev": "npm run dev:backend & npm run dev:frontend",
-    "build": "npm --prefix frontend-astro run build"
+    "build": "npm --prefix frontend run build"
   }
 }

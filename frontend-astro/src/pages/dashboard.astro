@@ -1,0 +1,11 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import DashboardReact from '../components/react/Dashboard';
+import { ToastProvider } from '../components/ui/Toast';
+---
+
+<MainLayout title="Dashboard">
+  <ToastProvider client:load>
+    <DashboardReact client:load />
+  </ToastProvider>
+</MainLayout>

@@ -1,7 +1,38 @@
-import { NavLink, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import {
+  NavLink,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { ToastProvider, useToast } from './components/ui/Toast';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+  SidebarInset,
+} from '@/components/ui/sidebar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import Dashboard from './pages/Dashboard';
 import Rooms from './pages/Rooms';
 import Guests from './pages/Guests';
@@ -10,25 +41,41 @@ import Billing from './pages/Billing';
 import Staff from './pages/Staff';
 import Login from './pages/Login';
 import {
-  LayoutDashboard, BedDouble, Users, CalendarRange,
-  IndianRupee, UserCog, Hotel, Search, Settings, HelpCircle, LogOut
+  LayoutDashboard,
+  BedDouble,
+  Users,
+  CalendarRange,
+  IndianRupee,
+  UserCog,
+  Search,
+  Settings,
+  LogOut,
+  ChevronUp,
+  User,
 } from 'lucide-react';
 
 const NAV_MAIN = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/rooms',     label: 'Rooms',     icon: BedDouble },
-  { to: '/guests',    label: 'Guests',    icon: Users },
-  { to: '/bookings',  label: 'Bookings',  icon: CalendarRange },
-  { to: '/billing',   label: 'Billing',   icon: IndianRupee, adminOnly: true },
-  { to: '/staff',     label: 'Staff',     icon: UserCog,     adminOnly: true },
+  { to: '/rooms', label: 'Rooms', icon: BedDouble },
+  { to: '/guests', label: 'Guests', icon: Users },
+  { to: '/bookings', label: 'Bookings', icon: CalendarRange },
 ];
 
-function Layout({ children }) {
+const NAV_ADMIN = [
+  { to: '/billing', label: 'Billing', icon: IndianRupee },
+  { to: '/staff', label: 'Staff', icon: UserCog },
+];
+
+function Layout() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const location = useLocation();
   const navigate = useNavigate();
   const toast = useToast();
   const user = JSON.parse(localStorage.getItem('user') || 'null');
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('user');
@@ -36,83 +83,119 @@ function Layout({ children }) {
     navigate('/login');
   };
 
-  const visibleNav = NAV_MAIN.filter(item => !item.adminOnly || user.role === 'admin');
-
   return (
-    <div className="flex h-screen bg-muted/40 font-sans selection:bg-primary/30">
-      <aside className="w-64 flex flex-col gap-0 bg-background/60 backdrop-blur-xl m-2 mr-0 rounded-xl border shrink-0 overflow-hidden stagger-1">
-        <div className="px-4 py-4 flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <Hotel size={16} className="text-primary-foreground" />
-          </div>
-          <div>
-            <h1 className="text-sm font-bold leading-none font-heading tracking-tight">Grand Stay</h1>
-            <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-widest font-medium opacity-70">Management</p>
-          </div>
-        </div>
+    <SidebarProvider defaultOpen={true}>
+      <div className="flex min-h-screen w-full bg-background font-mono selection:bg-foreground/10 selection:text-foreground">
+        <Sidebar collapsible="none" className="border-r border-border bg-card">
+          <SidebarHeader className="p-4 pt-6">
+            <div className="flex flex-col gap-0.5 px-2">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground">Grand Stay</p>
+              <h2 className="text-sm font-bold tracking-tight">Management</h2>
+            </div>
+          </SidebarHeader>
+          <SidebarContent className="px-2">
+            <SidebarGroup>
+              <SidebarGroupLabel className="text-[10px] uppercase tracking-widest px-2 pb-2">Main</SidebarGroupLabel>
+              <SidebarMenu>
+                {NAV_MAIN.map((item) => (
+                  <SidebarMenuItem key={item.to}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={location.pathname === item.to}
+                      tooltip={item.label}
+                      className="h-8 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <NavLink to={item.to}>
+                        <item.icon className="size-3.5" />
+                        <span>{item.label}</span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroup>
 
-        <Separator />
+            {user.role === 'admin' && (
+              <SidebarGroup className="mt-4">
+                <SidebarGroupLabel className="text-[10px] uppercase tracking-widest px-2 pb-2">Admin</SidebarGroupLabel>
+                <SidebarMenu>
+                  {NAV_ADMIN.map((item) => (
+                    <SidebarMenuItem key={item.to}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={location.pathname === item.to}
+                        tooltip={item.label}
+                        className="h-8 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <NavLink to={item.to}>
+                          <item.icon className="size-3.5" />
+                          <span>{item.label}</span>
+                        </NavLink>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroup>
+            )}
+          </SidebarContent>
+          <SidebarFooter className="p-4 border-t border-border/50">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton className="h-10 w-full justify-start gap-3 px-2">
+                  <Avatar className="size-6 border border-border">
+                    <AvatarFallback className="text-[10px] bg-muted">
+                      {user.username?.[0]?.toUpperCase() ?? 'G'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col items-start gap-0 min-w-0">
+                    <p className="truncate text-xs font-semibold">{user.username}</p>
+                    <p className="truncate text-[9px] text-muted-foreground uppercase tracking-wider">{user.role}</p>
+                  </div>
+                  <ChevronUp className="ml-auto size-3 text-muted-foreground" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="top" align="start" className="w-52 bg-card border-border shadow-2xl">
+                <DropdownMenuItem className="text-xs gap-2 cursor-pointer" onClick={() => navigate('/settings')}>
+                  <Settings className="size-3.5" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <Separator className="my-1 bg-border/50" />
+                <DropdownMenuItem className="text-xs gap-2 cursor-pointer text-destructive focus:text-destructive" onClick={handleLogout}>
+                  <LogOut className="size-3.5" />
+                  <span>Log Out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarFooter>
+        </Sidebar>
 
-        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
-          <p className="px-2 pb-1.5 pt-2 text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Platform</p>
-          {visibleNav.map(item => (
-            <NavLink key={item.to} to={item.to}>
-              {({ isActive }) => (
-                <Button
-                  variant={isActive ? 'secondary' : 'ghost'}
-                  size="sm"
-                  className={`w-full justify-start gap-2 text-[13px] ${isActive ? 'font-medium' : 'text-muted-foreground font-normal'}`}
-                >
-                  <item.icon size={15} />
-                  {item.label}
-                </Button>
-              )}
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="px-3 pb-2 space-y-0.5">
-          <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-[13px] text-muted-foreground font-normal">
-            <Settings size={15} /> Settings
-          </Button>
-          <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-[13px] text-muted-foreground font-normal">
-            <HelpCircle size={15} /> Help
-          </Button>
-        </div>
-
-        <Separator />
-
-        <div className="px-4 py-3 flex items-center gap-3 bg-muted/20">
-          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary">
-            {user.username?.[0]?.toUpperCase()}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium leading-none truncate capitalize">{user.username}</p>
-            <p className="text-[10px] text-muted-foreground truncate mt-0.5 uppercase tracking-tighter">{user.role}</p>
-          </div>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={handleLogout}>
-            <LogOut size={14} />
-          </Button>
-        </div>
-      </aside>
-
-      <main className="flex-1 overflow-y-auto m-2 rounded-xl border bg-background relative">
-        <header className="flex items-center gap-2 border-b px-4 h-12 shrink-0 sticky top-0 bg-background/80 backdrop-blur-sm z-10">
-          <Separator orientation="vertical" className="h-4" />
-          <div className="flex items-center gap-2 flex-1">
-            <Search size={14} className="text-muted-foreground" />
-            <input 
-              className="bg-transparent border-none outline-none text-sm text-muted-foreground w-full placeholder:text-muted-foreground/50" 
-              placeholder="Search anything..." 
-            />
-          </div>
-        </header>
-
-        <div className="h-[calc(100%-48px)]">
-           {children}
-        </div>
-      </main>
-    </div>
+        <SidebarInset className="flex flex-col overflow-hidden bg-background">
+          <header className="flex h-12 shrink-0 items-center justify-between border-b border-border/50 px-6">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Search className="size-3.5 text-muted-foreground" />
+                <Input
+                  className="h-7 w-64 border-none bg-transparent text-xs focus-visible:ring-0 placeholder:text-muted-foreground/50"
+                  placeholder="Quick search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-foreground">
+                <Settings className="size-4" />
+              </Button>
+            </div>
+          </header>
+          <main className="flex-1 overflow-auto p-6 scrollbar-hide">
+            <div className="animate-stagger-in">
+              <Outlet />
+            </div>
+          </main>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   );
 }
 
@@ -129,20 +212,30 @@ export default function App() {
     <ToastProvider>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Layout><Dashboard /></Layout>} />
-        <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-        <Route path="/rooms" element={<Layout><Rooms /></Layout>} />
-        <Route path="/guests" element={<Layout><Guests /></Layout>} />
-        <Route path="/bookings" element={<Layout><Bookings /></Layout>} />
-        <Route 
-          path="/billing" 
-          element={<Layout><RoleGuard adminOnly><Billing /></RoleGuard></Layout>} 
-        />
-        <Route 
-          path="/staff" 
-          element={<Layout><RoleGuard adminOnly><Staff /></RoleGuard></Layout>} 
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="rooms" element={<Rooms />} />
+          <Route path="guests" element={<Guests />} />
+          <Route path="bookings" element={<Bookings />} />
+          <Route
+            path="billing"
+            element={
+              <RoleGuard adminOnly>
+                <Billing />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="staff"
+            element={
+              <RoleGuard adminOnly>
+                <Staff />
+              </RoleGuard>
+            }
+          />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Route>
       </Routes>
     </ToastProvider>
   );

@@ -25,7 +25,7 @@ export default function CustomerDashboard() {
       const res = await axios.get(`${API_BASE_URL}/customer/bookings/${id}`);
       setBookings(res.data);
     } catch (err) {
-      console.error(err);
+      // Silent fail - will show empty bookings list
     } finally {
       setLoading(false);
     }
@@ -101,7 +101,7 @@ export default function CustomerDashboard() {
                     </Badge>
                     <div className="text-right">
                       <p className="text-[10px] font-bold uppercase opacity-40">Total Charged</p>
-                      <p className="text-lg font-bold">₹{booking.total_amount}</p>
+                      <p className="text-lg font-bold">{booking.total_amount != null ? `₹${booking.total_amount}` : '—'}</p>
                     </div>
                   </div>
                 </div>

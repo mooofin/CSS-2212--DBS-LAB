@@ -12,10 +12,9 @@ import customerRouter from './routes/customer.js';
 import authRouter from './routes/auth.js';
 import errorHandler from './middleware/errorHandler.js';
 
-dotenv.config();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '.env') });
 const frontendPath = path.join(__dirname, '../frontend-astro/dist');
 
 const app = express();
@@ -60,8 +59,14 @@ app.get('*', (req, res) => {
 // Error handler
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-    console.log(`Grand Stay Production Server running on http://localhost:${PORT}`);
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🏨 Hotel Management Server running on http://0.0.0.0:${PORT}`);
+    console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
 export default app;

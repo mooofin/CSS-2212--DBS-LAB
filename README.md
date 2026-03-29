@@ -1,164 +1,88 @@
-# Grand Stay: A Deep Dive into Professional Hotel Management
+# 🏨 Grand Stay: Elevating Hospitality through Data Excellence
 
-The Grand Stay project represents a modern approach to hotel operations, prioritizing database integrity and high-performance frontend architecture. Originally developed as a Database Systems Lab project (CSS 2212), it has evolved into an Astro-powered application that balances raw SQL power with a premium user experience.
+Welcome to **Grand Stay**, a sophisticated hotel management ecosystem that bridges the gap between traditional hospitality and modern, high-performance technology. Originally conceived as a deep dive into relational databases, it has evolved into a premium platform that delivers a seamless experience for both staff and guests.
 
-## Quick Start
+---
 
-### Prerequisites
-- Node.js >= 22.12.0
-- MySQL/MariaDB running
-- Database user: `hotel` with password: `hotel123`
+## 🌟 Our Philosophy
 
-### One-Command Setup
+At Grand Stay, we believe that exceptional hospitality starts with exceptional technology. Every check-in, every room assignment, and every billing transaction is backed by a robust, data-driven architecture that ensures reliability without sacrificing speed.
 
+> [!NOTE]
+> **Built for Performance**: By utilizing Astro's "Islands Architecture," we've reduced client-side JavaScript by 60%, ensuring that your management dashboard is as fast as a boutique stay is comfortable.
+
+---
+
+## 🚀 Quick Start: Welcome Aboard
+
+Getting the Grand Stay system up and running is as simple as a warm welcome at the front desk.
+
+### 1. The Magic Command
+From your terminal, run the unified start script:
 ```bash
 ./start.sh
 ```
 
-This will:
-- Check MySQL is running
-- Verify database exists
-- Install dependencies if needed
-- Build frontend if needed
-- Start the server on port 3001
-
-### Manual Setup
-
-If you prefer step-by-step:
-
-```bash
-# 1. Create and setup database
-mysql -u root -p < backend/db/schema.sql
-
-# 2. Configure environment (already set in backend/.env)
-# DB_HOST=localhost
-# DB_USER=hotel
-# DB_PASSWORD=hotel123
-# DB_NAME=hotel_mgmt
-# PORT=3001
-
-# 3. Install backend dependencies
-cd backend
-npm install
-
-# 4. Build frontend
-cd ../frontend-astro
-npm install
-npm run build
-
-# 5. Start server
-cd ../backend
-node server.js
-```
-
-### Access the Application
-
-**URL**: http://localhost:3001
-
-**Login Credentials**:
-- Admin: `admin` / `admin123`
-- Staff: `staff` / `staff123`
-- Customer: Use email/phone from bookings
-
-### Managing the Server
-
-```bash
-# Start server
-./start.sh
-
-# Stop server
-./kill.sh
-
-# Test endpoints
-./test.sh
-```
-
-### Development Mode
-
-For active development with hot reload:
-
-```bash
-# Terminal 1 - Backend
-cd backend
-npm run dev
-
-# Terminal 2 - Frontend
-cd frontend-astro
-npm run dev
-```
-
-Access frontend dev server at http://localhost:5174 with hot reload.
+### 2. What Happens Behind the Scenes?
+- ✅ **Sanity Check**: Briefly verifies your environment.
+- ✅ **Database Orchestration**: Sets up your MySQL/MariaDB schema automatically.
+- ✅ **Component Assembly**: Installs any missing pieces and builds the frontend.
+- ✅ **Full Launch**: Starts the server on **http://localhost:3001**.
 
 ---
 
-## Technical Architecture
+## 🔐 The Keys to the Kingdom
 
-The application follows a strict data-driven lifecycle, transitioning from server-side rendered layouts to interactive client-side islands.
+Explore the different facets of the system using our demo credentials:
 
-![Detailed System Architecture](./architecture_refined.svg)
-
-### The Architecture Strategy
-
-The system is built on a decoupled stack: a Node.js/Express backend providing a RESTful API and an Astro-powered frontend utilizing Islands Architecture.
-
-- **Unified Logic Layer**: The backend serves as a stateless REST API, handling authentication, business logic, and database orchestration. 
-- **Partial Hydration**: Migrating to Astro allowed for a 60% reduction in client-side JavaScript by rendering the "shell" (sidebar, headers) as static HTML. Only high-interactivity components, such as the Dashboard stats and Booking modals, are hydrated as React "islands."
-- **Raw SQL Engine**: Bypassing ORMs removes the "abstraction tax," ensuring that every millisecond of database overhead is accounted for. Triggers and Views handle the heavy lifting of state transitions and data aggregation.
+| Role | Identity | Access Key | Focus |
+|------|----------|------------|-------|
+| **Admin** | `admin` | `admin123` | Full strategic visibility & revenue tracking |
+| **Staff** | `staff` | `staff123` | Daily operations, check-ins, & guest care |
+| **Guest** | *See database* | `password123` | Personal stays & reservation history |
 
 ---
 
-## Technical Deep Dive
+## 🏛️ The Architecture of Excellence
 
-### Data Architecture
-At the heart of Grand Stay is a MySQL 8+ database utilizing the InnoDB engine. The relational model is strictly enforced through foreign keys and CHECK constraints.
+Grand Stay isn't just a website; it's a meticulously crafted system designed for reliability and scale.
 
-#### Advanced SQL Logic:
-- **Reactive Triggers**: SQL triggers handle the mission-critical logic of updating room statuses during check-in and auto-generating billing records upon booking confirmation. This ensures the database remains the absolute source of truth.
-- **Aggregated Views**: Custom views like `v_booking_details` flatten complex relationships (Guests → Rooms → Billing) into a single, high-performance read stream for the frontend.
-- **Generated Columns**: The `billing` table uses virtual columns to calculate taxes and totals, ensuring billing consistency without extra application code.
+### 🛠️ The Tech Stack
+- **Engine**: Node.js & Express RESTful API
+- **Interface**: Astro with React "Islands" for peak performance
+- **Heart**: MySQL 8+ with triggers and views for data integrity
+- **Styling**: Tailored Tailwind CSS for a premium aesthetic
 
-### API Surface & Security
-The backend exposes a structured REST API with role-based access control (RBAC):
-- **Rooms (`/api/rooms`)**: Inventory management and soft-delete capabilities.
-- **Guests (`/api/guests`)**: PII storage and comprehensive stay history.
-- **Bookings (`/api/bookings`)**: Lifecycle management (Check-in/Out/Cancel) and real-time availability validation.
-- **Staff (`/api/staff`)**: Shift management and role assignment.
+### 📊 System Design
+![Refined System Architecture](./architecture_refined.svg)
+
+We've decoupled the **Logic Layer** from the **Presentation Layer**, allowing the database to do what it does best: maintain the absolute truth. Triggers handle mission-critical state transitions, while Views flatten complex data into high-performance streams for the frontend.
 
 ---
 
-## Project Structure
+## 📂 The Blueprint
 
 ```text
 hotel-project/
-├── backend/
-│   ├── db/
-│   │   ├── connection.js        # mysql2 pool management
-│   │   └── schema.sql           # full DDL + seed data
-│   ├── routes/                  # Express controllers per module
-│   ├── middleware/              # RBAC & Error handling
-│   └── server.js                # Production entry point
-├── frontend-astro/              # Optimized Astro environment
-│   ├── src/
-│   │   ├── components/react/    # Interactive islands
-│   │   ├── layouts/             # Astro static layout
-│   │   └── pages/               # File-based routing
-│   └── astro.config.mjs
-└── README.md
+├── backend/             # The RESTful Heart (Node.js/Express)
+│   ├── db/              # SQL Schemas, Triggers, & Views
+│   ├── routes/          # Purpose-built API endpoints
+│   └── server.js        # The Production Portal
+├── frontend-astro/      # The Human Interface (Astro/React)
+│   ├── src/             # Where the magic happens (islands & pages)
+│   └── astro.config.mjs # The core configuration
+└── README.md            # Your map to the project
 ```
 
 ---
 
-## Getting Started (Production)
+## 🎓 The Academic Journey
 
-See the [Quick Start](#quick-start) section above for instructions.
+Developed for the **Database Systems Lab (CSS 2212)**, Grand Stay is a testament to the power of raw SQL. By intentionally eschewing heavy ORMs, we've achieved a level of control and performance that demonstrates a deep understanding of data lifecycle management and server-side automation.
 
 ---
 
-## User Access Levels
+### ✨ Ready to Begin?
+[Quick Start](#-quick-start-welcome-aboard) | [Kill the server](./kill.sh)
 
-- **Admin** (`admin` / `admin123`): Full visibility into revenue, staff performance, and system settings.
-- **Staff** (`staff` / `staff123`): Limited to guest check-ins, room inventory, and scheduling.
-
-## Academic Context
-
-This project was developed for the **Database Systems Lab (CSS 2212)**. By eschewing modern ORMs, it demonstrates a ground-up understanding of relational data modeling, query optimization, and server-side automation through SQL triggers and views.
+**Built with passion for modern web and database technologies.**

@@ -1,11 +1,19 @@
 import express from 'express';
 import pool from '../db/connection.js';
+import { HTTP_STATUS, USER_ROLES } from '../constants/index.js';
 
 const router = express.Router();
 
 // Customer Login
-router.post('/login', async (req, res) => {
-  const { identifier, password } = req.body; // identifier can be email or username
+router.post('/login', async (req, res, next) => {
+  const { identifier, password } = req.body;
+  
+  if (!identifier || !password) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({ 
+      error: 'Email/username and password are required' 
+    });
+  }
+
   try {
     const [rows] = await pool.query(
       'SELECT guest_id, first_name, last_name, email, username FROM guests WHERE (email = ? OR username = ?) AND password = ?',
@@ -13,7 +21,9 @@ router.post('/login', async (req, res) => {
     );
 
     if (rows.length === 0) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({ 
+        error: 'Invalid credentials' 
+      });
     }
 
     const customer = rows[0];
@@ -21,21 +31,28 @@ router.post('/login', async (req, res) => {
       guest_id: customer.guest_id,
       username: customer.username || customer.email,
       name: `${customer.first_name} ${customer.last_name}`,
-      role: 'customer'
+      role: USER_ROLES.CUSTOMER
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 });
 
 // Get Personal Profile
-router.get('/profile/:id', async (req, res) => {
+router.get('/profile/:id', async (req, res, next) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM guests WHERE guest_id = ?', [req.params.id]);
-    if (rows.length === 0) return res.status(404).json({ error: 'Guest not found' });
+    const [rows] = await pool.query(
+      'SELECT guest_id, first_name, last_name, email, phone, address, city, state, postal_code, country FROM guests WHERE guest_id = ?', 
+      [req.params.id]
+    );
+    
+    if (rows.length === 0) {
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ error: 'Guest not found' });
+    }
+    
     res.json(rows[0]);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 });
 
