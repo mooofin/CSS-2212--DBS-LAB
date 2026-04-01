@@ -43,6 +43,7 @@ import Login from './pages/Login';
 import CustomerLogin from './pages/CustomerLogin';
 import CustomerRegister from './pages/CustomerRegister';
 import CustomerDashboard from './pages/CustomerDashboard';
+import CustomerBookings from './pages/CustomerBookings';
 import {
   LayoutDashboard,
   BedDouble,
@@ -80,7 +81,6 @@ function Layout() {
     return <Navigate to="/login" replace />;
   }
 
-  // Redirect customers to customer dashboard
   if (user.role === 'customer') {
     return <Navigate to="/customer/dashboard" replace />;
   }
@@ -226,6 +226,7 @@ export default function App() {
         
         {/* Customer Routes */}
         <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+        <Route path="/customer/book" element={<CustomerBookings />} />
         
         {/* Staff/Admin Routes */}
         <Route element={<Layout />}>

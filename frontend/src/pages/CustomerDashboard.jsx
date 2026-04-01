@@ -145,7 +145,7 @@ export default function CustomerDashboard() {
                 <CardTitle className="text-sm">My Bookings</CardTitle>
                 <CardDescription className="text-[10px]">Your reservation history</CardDescription>
               </div>
-              <Link to="/bookings">
+              <Link to="/customer/book">
                 <Button size="sm" className="h-7 text-xs">
                   Book a Room
                   <ArrowRight className="h-3 w-3 ml-1" />
@@ -162,7 +162,7 @@ export default function CustomerDashboard() {
               <div className="text-center py-8">
                 <BedDouble className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground">No bookings yet</p>
-                <Link to="/bookings">
+                <Link to="/customer/book">
                   <Button variant="outline" size="sm" className="mt-3 h-7 text-xs">
                     Make your first booking
                   </Button>
@@ -212,7 +212,7 @@ export default function CustomerDashboard() {
               </CardContent>
             </Card>
           </Link>
-          <Link to="/rooms">
+          <Link to="/customer/book">
             <Card className="hover:bg-muted/30 transition-colors cursor-pointer">
               <CardContent className="p-4 flex items-center gap-3">
                 <BedDouble className="h-4 w-4 text-primary" />
