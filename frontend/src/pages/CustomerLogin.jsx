@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { login } from '@/api/auth';
+import { customerLogin } from '@/api/auth';
 import { useToast } from '@/components/ui/Toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,12 +12,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Loader2, User } from 'lucide-react';
+import { ArrowLeft, Loader2, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import AntigravityBackground from '@/components/AntigravityBackground';
 
-export default function Login() {
-  const [username, setUsername] = useState('');
+export default function CustomerLogin() {
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const toast = useToast();
@@ -26,10 +26,10 @@ export default function Login() {
     event.preventDefault();
     setLoading(true);
     try {
-      const res = await login({ username, password });
+      const res = await customerLogin({ identifier, password });
       localStorage.setItem('user', JSON.stringify(res.data));
-      toast.success(`Welcome back, ${res.data.username}!`);
-      window.location.href = '/dashboard';
+      toast.success(`Welcome, ${res.data.name}!`);
+      window.location.href = '/customer/dashboard';
     } catch (err) {
       toast.error(err.response?.data?.error || 'Login failed');
     } finally {
@@ -42,28 +42,31 @@ export default function Login() {
       <AntigravityBackground />
       <Card className="relative z-10 w-80 border-border bg-card/90 backdrop-blur-sm shadow-none">
         <CardHeader className="space-y-1 pb-4 text-center">
-          <h1 className="text-xs font-semibold tracking-[0.2em] uppercase text-muted-foreground">
-            Grand Stay
-          </h1>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <User className="h-4 w-4 text-primary" />
+            <h1 className="text-xs font-semibold tracking-[0.2em] uppercase text-primary">
+              Guest Portal
+            </h1>
+          </div>
           <CardTitle className="text-xl font-bold tracking-tight text-foreground">
-            Portal
+            Sign In
           </CardTitle>
           <CardDescription className="text-[10px] text-muted-foreground uppercase tracking-widest">
-            Enter credentials to access
+            Access your bookings
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="username" className="text-[10px] uppercase tracking-wider text-muted-foreground">Username</Label>
+              <Label htmlFor="identifier" className="text-[10px] uppercase tracking-wider text-muted-foreground">Email or Username</Label>
               <Input
-                id="username"
-                placeholder="admin"
+                id="identifier"
+                placeholder="your@email.com"
                 required
                 className="h-8 text-xs bg-background/50 border-border/50 focus:border-foreground/50 transition-colors"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-                autoComplete="username"
+                value={identifier}
+                onChange={(event) => setIdentifier(event.target.value)}
+                autoComplete="email"
               />
             </div>
             <div className="space-y-1.5">
@@ -81,7 +84,7 @@ export default function Login() {
             </div>
             <Button
               type="submit"
-              className="w-full h-8 text-xs font-semibold uppercase tracking-widest bg-foreground text-background hover:bg-foreground/90 transition-all"
+              className="w-full h-8 text-xs font-semibold uppercase tracking-widest bg-primary text-primary-foreground hover:bg-primary/90 transition-all"
               disabled={loading}
             >
               {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : "Sign In"}
@@ -90,22 +93,25 @@ export default function Login() {
 
           <Separator className="bg-border/50" />
 
-          <div className="space-y-2 text-center">
-            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Demo Access</p>
-            <div className="flex justify-between text-[10px] text-muted-foreground">
-              <code className="bg-muted px-1 rounded">admin:admin123</code>
-              <code className="bg-muted px-1 rounded">staff:staff123</code>
-            </div>
+          <div className="space-y-2">
+            <p className="text-[10px] text-center text-muted-foreground">
+              Don't have an account?
+            </p>
+            <Link to="/customer/register">
+              <Button
+                variant="outline"
+                className="w-full h-8 text-xs font-medium"
+              >
+                Create Account
+              </Button>
+            </Link>
           </div>
 
           <Separator className="bg-border/50" />
 
-          <Link 
-            to="/customer/login" 
-            className="flex items-center justify-center gap-2 text-[10px] text-primary hover:text-primary/80 transition-colors"
-          >
-            <User className="h-3 w-3" />
-            Guest Portal →
+          <Link to="/login" className="flex items-center justify-center gap-1 text-[10px] text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-3 w-3" />
+            Back to Staff Portal
           </Link>
         </CardContent>
       </Card>

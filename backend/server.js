@@ -15,7 +15,7 @@ import errorHandler from './middleware/errorHandler.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '.env') });
-const frontendPath = path.join(__dirname, '../frontend-astro/dist');
+const frontendPath = path.join(__dirname, '../frontend/dist');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -44,16 +44,9 @@ app.use('/api/*', (req, res) => {
     res.status(404).json({ error: 'API endpoint not found' });
 });
 
-// Catch-all to serve the closest Astro page or the main index
+// Catch-all to serve the React SPA
 app.get('*', (req, res) => {
-    // Attempt to serve the specific route's index.html if it exists
-    const routePath = req.path.endsWith('/') ? req.path : `${req.path}/`;
-    const potentialFile = path.join(frontendPath, routePath, 'index.html');
-    res.sendFile(potentialFile, (err) => {
-        if (err) {
-            res.sendFile(path.join(frontendPath, 'index.html'));
-        }
-    });
+    res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
 // Error handler
@@ -65,8 +58,8 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🏨 Hotel Management Server running on http://0.0.0.0:${PORT}`);
-    console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Hotel Management Server running on http://0.0.0.0:${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
 export default app;

@@ -40,6 +40,9 @@ import Bookings from './pages/Bookings';
 import Billing from './pages/Billing';
 import Staff from './pages/Staff';
 import Login from './pages/Login';
+import CustomerLogin from './pages/CustomerLogin';
+import CustomerRegister from './pages/CustomerRegister';
+import CustomerDashboard from './pages/CustomerDashboard';
 import {
   LayoutDashboard,
   BedDouble,
@@ -75,6 +78,11 @@ function Layout() {
 
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  // Redirect customers to customer dashboard
+  if (user.role === 'customer') {
+    return <Navigate to="/customer/dashboard" replace />;
   }
 
   const handleLogout = () => {
@@ -211,7 +219,15 @@ export default function App() {
   return (
     <ToastProvider>
       <Routes>
+        {/* Public Routes */}
         <Route path="/login" element={<Login />} />
+        <Route path="/customer/login" element={<CustomerLogin />} />
+        <Route path="/customer/register" element={<CustomerRegister />} />
+        
+        {/* Customer Routes */}
+        <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+        
+        {/* Staff/Admin Routes */}
         <Route element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />

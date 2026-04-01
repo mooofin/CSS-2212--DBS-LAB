@@ -1,82 +1,75 @@
-# Grand Stay: Hotel Management System
+"# Grand Stay: Hotel Management System
 
-A hotel management system that puts business logic in the database. Built for a database course, but actually works.
+Database Systems Lab project. A working hotel management system with business logic in MySQL.
 
 ---
 
-## How to Run It
+## Run It
 
 ```bash
 ./manage.sh start
 ```
 
-This installs dependencies and starts both backend (port 3001) and frontend (port 5173).
+Installs dependencies and starts backend (3001) and frontend (5173).
 
-**Other commands:**
+**Commands:**
 ```bash
-./manage.sh stop      # Stop all servers
-./manage.sh restart   # Restart the application
-./manage.sh test      # Run API tests
-./manage.sh status    # Check if servers are running
-./manage.sh clean     # Remove dependencies and build artifacts
+./manage.sh stop      # Stop servers
+./manage.sh restart   # Restart
+./manage.sh test      # API tests
+./manage.sh status    # Check status
+./manage.sh clean     # Clean build
 ```
 
 ---
 
 ## Demo Accounts
 
-| Role | Username | Password | What You Can Do |
-|------|----------|----------|-----------------|
-| Admin | `admin` | `admin123` | Analytics and revenue reports |
-| Staff | `staff` | `staff123` | Check-ins, room assignments |
-| Guest | *See database* | `password123` | View your bookings |
+| Role | Username | Password | Access |
+|------|----------|----------|--------|
+| Admin | `admin` | `admin123` | Reports, billing |
+| Staff | `staff` | `staff123` | Bookings, check-ins |
+| Guest | (in DB) | `password123` | Own bookings |
 
 ---
 
-## Technical Details
+## Stack
 
-**Stack:**
-- Backend: Node.js + Express
-- Frontend: Astro with React islands
-- Database: MySQL 8+
-- Styling: Tailwind CSS
-
-**Why Astro:** The Islands Architecture loads React components only where needed. This cuts client-side JavaScript by about 60% compared to a full React app. For a dashboard with mostly static content, it's a noticeable difference.
+- Node.js + Express backend
+- React + Vite frontend
+- MySQL 8+ database
+- Tailwind CSS
 
 ### Architecture
 
 ![System Architecture](./architecture_refined.svg)
 
-Most of the business logic lives in database triggers and views. Room availability, billing calculations, and state transitions happen at the database layer. The API mostly reads from views and writes to tables.
+The system uses a three-tier architecture. React handles the interface. Express provides REST endpoints. MySQL manages data and enforces business rules through triggers and stored views.
 
-This means less application code and fewer places for bugs to hide. When room status changes, a trigger updates availability. When you query available rooms, you're reading a view that already did the math.
+**Control Flow:**
+
+A guest searches for rooms. The frontend sends a request to `/api/rooms`. The endpoint queries a view that already calculated availability—checking current bookings, maintenance status, and date conflicts in a single SELECT. The view returns the data. The API returns JSON. React renders the list.
+
+When staff check in a guest, the flow changes. The frontend POSTs to `/api/bookings/:id/checkin`. Express receives the request and updates the booking status. A database trigger fires automatically, marking the room as occupied. Another trigger creates a billing record with calculated charges and tax. No application code handles these updates. The database maintains consistency.
+
+This design centralizes business logic. Room availability, billing calculations, and state transitions all happen in SQL. The API layer remains thin: read from views, write to tables. Fewer bugs, less code. The cost is expertise: debugging requires reading trigger definitions and understanding MySQL's execution order.
 
 ---
 
-## Project Structure
+## Structure
 
-```text
+```
 hotel-project/
 ├── backend/
-│   ├── db/              # Schemas, triggers, views
-│   ├── routes/          # REST endpoints
+│   ├── db/          # SQL schemas, triggers
+│   ├── routes/      # API endpoints
 │   └── server.js
-├── frontend-astro/
-│   ├── src/             # Pages and components
-│   └── astro.config.mjs
-└── README.md
+├── frontend/
+│   └── src/         # React components
+└── manage.sh
 ```
 
 ---
 
-## Context
-
-This was built for Database Systems Lab (CSS 2212). The assignment was to design a non-trivial database schema. We deliberately avoided ORMs to see how much logic could live in SQL itself.
-
-Turns out: quite a bit. Triggers handle state machines, views handle reporting, and stored procedures (not used here, but could be) can handle complex transactions. The application layer becomes thinner.
-
-Whether this is a good idea for production depends on your team. If everyone knows SQL well, it's maintainable. If not, debugging trigger chains is miserable.
-
----
-
-[How to Run](#how-to-run-it) | [Management Commands](./manage.sh)
+Built for CSS 2212 (Database Systems Lab). No ORM—raw SQL only.
+"

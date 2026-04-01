@@ -42,7 +42,7 @@ router.post('/login', async (req, res, next) => {
 router.get('/profile/:id', async (req, res, next) => {
   try {
     const [rows] = await pool.query(
-      'SELECT guest_id, first_name, last_name, email, phone, address, city, state, postal_code, country FROM guests WHERE guest_id = ?', 
+      'SELECT guest_id, first_name, last_name, email, phone, address, id_type, id_number FROM guests WHERE guest_id = ?', 
       [req.params.id]
     );
     
@@ -80,6 +80,80 @@ router.put('/profile/:id', async (req, res) => {
     res.json({ message: 'Profile updated successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Guest Registration
+router.post('/register', async (req, res, next) => {
+  const { first_name, last_name, email, username, password, phone, address } = req.body;
+  
+  // Validation
+  if (!first_name || !last_name || !email || !password) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({ 
+      error: 'First name, last name, email, and password are required' 
+    });
+  }
+
+  // Basic email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({ 
+      error: 'Invalid email format' 
+    });
+  }
+
+  // Password validation
+  if (password.length < 6) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json({ 
+      error: 'Password must be at least 6 characters' 
+    });
+  }
+
+  try {
+    // Check if email already exists
+    const [existing] = await pool.query(
+      'SELECT guest_id FROM guests WHERE email = ?',
+      [email]
+    );
+
+    if (existing.length > 0) {
+      return res.status(HTTP_STATUS.CONFLICT).json({ 
+        error: 'Email already registered' 
+      });
+    }
+
+    // Check if username already exists (if provided)
+    if (username) {
+      const [existingUsername] = await pool.query(
+        'SELECT guest_id FROM guests WHERE username = ?',
+        [username]
+      );
+
+      if (existingUsername.length > 0) {
+        return res.status(HTTP_STATUS.CONFLICT).json({ 
+          error: 'Username already taken' 
+        });
+      }
+    }
+
+    // Insert new guest
+    const [result] = await pool.query(
+      'INSERT INTO guests (first_name, last_name, email, username, password, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [first_name, last_name, email, username || null, password, phone || null, address || null]
+    );
+
+    const guest_id = result.insertId;
+
+    // Return the new guest info (similar to login response)
+    res.status(HTTP_STATUS.CREATED).json({
+      guest_id,
+      username: username || email,
+      name: `${first_name} ${last_name}`,
+      role: USER_ROLES.CUSTOMER,
+      message: 'Registration successful'
+    });
+  } catch (err) {
+    next(err);
   }
 });
 
